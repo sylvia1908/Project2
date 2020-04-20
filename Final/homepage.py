@@ -1,15 +1,18 @@
 from flask import Flask, render_template, redirect
 from flask_pymongo import PyMongo
+import LoadData
 
 # Create an instance of Flask
 app = Flask(__name__)
 # Mars ={}
 
-# mongo = PyMongo(app, uri="mongodb://localhost:27017/MarsMission")
+mongo = PyMongo(app, uri="mongodb://localhost:27017/Covid19")
 
 @app.route("/")
 def index():
-
+    Covid19 = mongo.db.Covid19
+    Covid19_data = LoadData.getData()
+    Covid19.update({}, Covid19_data, upsert=True)
     return render_template("index.html")
 
 @app.route("/map")
