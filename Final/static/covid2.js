@@ -95,29 +95,7 @@ function buildCharts(state) {
         var ConfirmedLoc = result.map(d =>d.Confirmed)
         var max = Math.max(...ConfirmedLoc)
         
-        
-        var size = 0;
-        var DeathSizeAdj =[];
-        // This function adjusting the size of death numbers to use in chart 
-        DeathsLoc.forEach(function(d) {
-            if (d > 9000) {
-                d = d/250;
-                DeathSizeAdj.push(d);
-            }
-            else if (d <= 9000 && d > 1000) {
-                d = d/10;
-                DeathSizeAdj.push(d);
-            }
-            else if (d <= 1000 && d > 500) {
-                size = d/2
-                DeathSizeAdj.push(size);
-            }
-            else {
-                DeathSizeAdj.push(d);
-            }
-          });
        
-
         Trace1 = {
             x:Locations,
             y:ConfirmedLoc,
@@ -127,9 +105,15 @@ function buildCharts(state) {
             mode : 'markers',
             marker: {
                 color: 'rgb(234, 153, 153)',
-                size: 15,
-                // ConfirmedLoc.map(d =>d/20),
-                colorscale: "Earth"
+                size: ConfirmedLoc,
+                sizeref: 2.0 * Math.max(...ConfirmedLoc) / (ConfirmedLoc*2),
+                sizemode: 'area',
+                line: {
+                color: 'rgb(231, 99, 250)',
+                width: 1
+            }
+               
+                
             }
             
         };
@@ -153,7 +137,9 @@ function buildCharts(state) {
             mode : 'markers',
             marker: {
                 color: 'rgb(234, 153, 153)',
-                size: DeathSizeAdj,
+                size: DeathsLoc,
+                sizeref: 2.0 * Math.max(...DeathsLoc) / (DeathsLoc*2),
+                sizemode: 'area',
                 line: {
                 color: 'rgb(231, 99, 250)',
                 width: 1
